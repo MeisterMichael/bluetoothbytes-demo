@@ -1,15 +1,15 @@
-local bt = require "plugin.bt"
+local bluetoothbytes = require "plugin.bluetoothbytes"
 local json = require "json"
 local widget = require "widget"
 local bluetoothList
 local bluetoothTable = {}
 local deviceTable = {}
--- note location is required for bluetooth on android 6.0+ 
+-- note location is required for bluetooth on android 6.0+
 
 --request premission for 6.0+
 native.showPopup( "requestAppPermission", {
    appPermission = "Location", urgency = "Critical", listener= function ( e )
-   	
+
    end} )
 --
 
@@ -37,7 +37,7 @@ local function loadBluetoothTable( )
 	end
 
 end
-bt.init(function (event)
+bluetoothbytes.init(function (event)
 	if (event.type == "device found") then
 		native.setActivityIndicator( false )
 		if (isIDInTable(event.deviceID) == false) then
@@ -53,31 +53,32 @@ bt.init(function (event)
 		native.showAlert( "Connected to device", "Name:"..event.deviceName, {"Ok"} )
 		bluetoothTable = nil
 		bluetoothTable = {}
-		bt.search()
+		bluetoothbytes.search()
 		native.setActivityIndicator( false )
 	end
 	if (event.type == "disconnect") then
 		native.showAlert( "Disconnected from device", "Name:"..event.deviceName, {"Ok"} )
 		bluetoothTable = nil
 		bluetoothTable = {}
-		bt.search()
+		bluetoothbytes.search()
 		native.setActivityIndicator( false )
 	end
 	if (event.type == "connection error") then
 		native.showAlert( "Connection error", "Name:"..event.deviceName.."/Error: "..event.error, {"Ok"} )
 		bluetoothTable = nil
 		bluetoothTable = {}
-		bt.search()
+		bluetoothbytes.search()
 	end
 	if (event.type == "discovery finished") then
 		native.setActivityIndicator( false )
 	end
-	
+
 	if (event.type == "error") then
 		native.showAlert( "Disconnected from device", "Name:"..event.error, {"Ok"} )
 	end
-	if (event.type == "message") then
-		native.showAlert( "Message Received", "Name:"..event.error, {"Ok"} )
+	if (event.type == "bytes") then
+		native.showAlert( "Bytes Received", "Name:"..event.error, {"Ok"} )
+    print( json.encode( event.bytes )
 	end
 end)
 local function onRowRenderBluetoothList( event )
@@ -110,14 +111,14 @@ bluetoothList = widget.newTableView
     onRowTouch = function  (e)
       if e.phase == "release" then
       	if (e.row.params.btType == "bluetooth") then
-      		bt.connect(bluetoothTable[e.row.params.index]["deviceID"])
+      		bluetoothbytes.connect(bluetoothTable[e.row.params.index]["deviceID"])
       		native.setActivityIndicator( true )
       	else
-      		bt.connect(deviceTable[e.row.params.index]["deviceID"])
+      		bluetoothbytes.connect(deviceTable[e.row.params.index]["deviceID"])
       		native.setActivityIndicator( true )
       	end
       end
-    end, 
+    end,
 }
 
 local bluetoothSearch = widget.newButton{
@@ -127,12 +128,12 @@ local bluetoothSearch = widget.newButton{
 	onRelease = function ( event )
 		bluetoothTable = nil
 		bluetoothTable = {}
-		bt.search()
+		bluetoothbytes.search()
 		native.setActivityIndicator( true )
 	end,
 }
 timer.performWithDelay( 2000, function (  )
-	
-	deviceTable = bt.getDevices()
+
+	deviceTable = bluetoothbytes.getDevices()
 	loadBluetoothTable( )
 end, -1 )

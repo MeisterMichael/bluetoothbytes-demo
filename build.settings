@@ -35,7 +35,7 @@ settings =
         },
     },
     plugins={
-    	["plugin.bt"] ={publisherId = "tech.scotth",},
+    	["plugin.bluetoothbytes"] ={ publisherId = "com.spacekace", },
     }
 
 }
