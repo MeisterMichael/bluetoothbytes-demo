@@ -32,6 +32,9 @@ settings =
         usesPermissions =
         {
             "android.permission.INTERNET",
+            "android.permission.BLUETOOTH",
+            "android.permission.BLUETOOTH_ADMIN",
+            "android.permission.LOCATION",
         },
     },
     plugins={

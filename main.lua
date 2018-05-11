@@ -7,10 +7,10 @@ local deviceTable = {}
 -- note location is required for bluetooth on android 6.0+
 
 --request premission for 6.0+
-native.showPopup( "requestAppPermission", {
-   appPermission = "Location", urgency = "Critical", listener= function ( e )
-
-   end} )
+-- native.showPopup( "requestAppPermission", {
+--   appPermission = "Location", urgency = "Critical", listener= function ( e )
+--   end
+-- } )
 --
 
 local bg = display.newRect( display.contentCenterX, display.contentCenterY, display.actualContentWidth, display.actualContentHeight )
@@ -132,11 +132,10 @@ local bluetoothSearch = widget.newButton{
 		native.setActivityIndicator( true )
 	end,
 }
-timer.performWithDelay( 2000, function (  )
-
+timer.performWithDelay( 10000, function (  )
 	deviceTable = bluetoothbytes.getDevices()
   if deviceTable == nil then
     deviceTable = {}
   end
 	loadBluetoothTable( )
-end, -1 )
+end )
