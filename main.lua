@@ -78,7 +78,7 @@ bluetoothbytes.init(function (event)
 	end
 	if (event.type == "bytes") then
 		native.showAlert( "Bytes Received", "Name:"..event.error, {"Ok"} )
-    print( json.encode( event.bytes )
+    print( json.encode( event.bytes ) )
 	end
 end)
 local function onRowRenderBluetoothList( event )
@@ -135,5 +135,8 @@ local bluetoothSearch = widget.newButton{
 timer.performWithDelay( 2000, function (  )
 
 	deviceTable = bluetoothbytes.getDevices()
+  if deviceTable == nil then
+    deviceTable = {}
+  end
 	loadBluetoothTable( )
 end, -1 )
